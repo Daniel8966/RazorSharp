@@ -137,18 +137,38 @@ ipcMain.handle("guardar-nota", async (event, { rutaVault, texto }) => {
   }
 });
 
-// Leer todas las notas (para mostrarlas en tu app)
+// Leer todas las notas (para mostrarlas en tu app) convertir a arreglo de json con fecha y contenido [obj, obj]
 ipcMain.handle("leer-notas", async (event, rutaVault) => {
   try {
     const notasPath = path.join(rutaVault, "Notas", NOTAS_FILENAME);
 
     if (!fs.existsSync(notasPath)) {
-      return { success: true, contenido: "" };
+      return { success: true, notas: [] };
     }
 
-    const contenido = fs.readFileSync(notasPath, "utf-8");
-    return { success: true, contenido };
+    const contenido = fs.readFileSync(notasPath, "utf8");
+
+    const regex = /---\s*\n\[(.*?)\]\s*\n([\s\S]*?)(?=\n---|\s*$)/g;
+
+    const notas = [];
+    let match;
+
+    while ((match = regex.exec(contenido)) !== null) {
+      notas.push({
+        fecha: match[1],
+        contenido: match[2].trim()
+      });
+    }
+
+    return {
+      success: true,
+      notas
+    };
+
   } catch (error) {
-    return { success: false, error: error.message };
+    return {
+      success: false,
+      error: error.message
+    };
   }
 });

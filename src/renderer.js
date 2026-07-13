@@ -21,22 +21,33 @@ let current = 0;
 
 // Fallback por si aun no conectas window.vault.getPhrases() via IPC.
 const fallbackPhrases = [
-  'Hoy hago una cosa a la vez.',
-  '¿Que es lo unico que, si lo logro hoy, hace que el dia valga la pena?',
-  'No necesito terminarlo todo, solo empezar lo importante.',
+  'Guarda frases para mostrar Frases'
 ];
-
 async function loadPhrases() {
-  try {
-    phrases = await window.vault.getPhrases();
-    if (!Array.isArray(phrases) || phrases.length === 0) throw new Error('vacio');
-  } catch {
-    phrases = fallbackPhrases;
+  // Aseguramos tener el vault antes de usarlo
+  if (!vaultActual) {
+    vaultActual = await window.api.obtenerUltimaBoveda();
   }
+
+  let listaFrases;
+  try {
+    const resultado = await window.api.leerNotas(vaultActual);
+
+    if (resultado.success && Array.isArray(resultado.notas) && resultado.notas.length > 0) {
+      // Ajusta "resultado.notas" al nombre real de la propiedad que devuelve tu handler
+      listaFrases = resultado.notas;
+    } else {
+      listaFrases = fallbackPhrases.map(texto => ({ fecha: '', contenido: texto }));
+    }
+  } catch (error) {
+    console.error('Error cargando frases:', error);
+    listaFrases = fallbackPhrases.map(texto => ({ fecha: '', contenido: texto }));
+  }
+
+  phrases = listaFrases;
   buildDots();
   renderPhrase(0);
 }
-
 function buildDots() {
   dotsEl.innerHTML = '';
   phrases.forEach((_, i) => {
@@ -50,10 +61,17 @@ function buildDots() {
 
 function renderPhrase(index) {
   current = (index + phrases.length) % phrases.length;
+  const { fecha, contenido } = phrases[current];
 
   phraseEl.classList.add('is-fading');
   setTimeout(() => {
-    phraseEl.textContent = phrases[current];
+    phraseEl.textContent = contenido;
+
+    // Si tienes un elemento para mostrar la fecha, actualízalo aquí
+    if (typeof fechaEl !== 'undefined' && fechaEl) {
+      fechaEl.textContent = fecha;
+    }
+
     phraseEl.classList.remove('is-fading');
   }, 140);
 
@@ -69,8 +87,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowLeft') renderPhrase(current - 1);
   if (e.key === 'ArrowRight') renderPhrase(current + 1);
 });
-
-loadPhrases();
 
 /* ---------- Panel de nota rapida ---------- */
 const noteInput = document.getElementById('note-input');
@@ -111,16 +127,8 @@ noteInput.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') saveBtn.click();
 });
 
-// index.html (script)
+//index script
 window.addEventListener("DOMContentLoaded", async () => {
-  const vault = await window.api.obtenerUltimaBoveda();
-  console.log("Bóveda cargada:", vault);
-
-  // Cargar notas existentes en un textarea, por ejemplo
-  const resultado = await window.api.leerNotas(vaultActual);
-  if (resultado.success) {
-    console.log("notas recuperadas de manera exitosa");
-    console.log(resultado.contenido);
-    //document.getElementById("todasLasNotas").textContent = resultado.contenido
-  }
+  vaultActual = await window.api.obtenerUltimaBoveda();
+  await loadPhrases();
 });
