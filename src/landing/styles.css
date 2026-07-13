@@ -1,0 +1,106 @@
+  <link rel="stylesheet" href="styles.css" />
+
+
+<style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+      color: #f0f0f0;
+    }
+
+    .card {
+      background: #2c2c3e;
+      padding: 40px;
+      border-radius: 16px;
+      width: 420px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #a0a0b8;
+      margin-bottom: 24px;
+    }
+
+    .selector {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #3f3f56;
+      background: #1e1e2f;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      padding: 10px 16px;
+      transition: 0.2s;
+    }
+
+    #btnSeleccionar {
+      background: #3f3f56;
+      color: #fff;
+    }
+
+    #btnSeleccionar:hover {
+      background: #52527a;
+    }
+
+    #btnCrear {
+      background: #6c5ce7;
+      color: #fff;
+      width: 100%;
+      padding: 12px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    #btnCrear:hover {
+      background: #5a4bd1;
+    }
+
+    #btnCrear:disabled {
+      background: #44445a;
+      cursor: not-allowed;
+    }
+
+    #mensaje {
+      margin-top: 16px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+
+    .exito {
+      color: #4ade80;
+    }
+
+    .error {
+      color: #f87171;
+    }
+  </style>

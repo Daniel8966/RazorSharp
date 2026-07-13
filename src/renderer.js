@@ -119,7 +119,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   // Cargar notas existentes en un textarea, por ejemplo
   const resultado = await window.api.leerNotas(vaultActual);
   if (resultado.success) {
-    console.log("notas recuperadas de manera exitosa")
-    document.getElementById("todasLasNotas").textContent = resultado.contenido;
+    console.log("notas recuperadas de manera exitosa");
+    console.log(resultado.contenido);
+    //document.getElementById("todasLasNotas").textContent = resultado.contenido
   }
 });

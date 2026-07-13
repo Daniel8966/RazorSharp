@@ -7,16 +7,6 @@ const path = require("path")
 const fs = require("fs");
 
 
-if (fs.existsSync("config.json")) {
-    //cargarEditor();
-    console.log("en efecto existe el config");
-
-} else {
-    console.log("no existe ni mierda");
-    //cargarLanding();
-}
-
-
 function createWindow() {
   const win = new BrowserWindow({
     width: 1280,
@@ -32,7 +22,7 @@ function createWindow() {
     },
   });
 
-  win.loadFile(path.join(__dirname, 'src/landing.html'));
+  win.loadFile(path.join(__dirname, 'src/landing/landing.html'));
 }
 
 app.whenReady().then(() => {
@@ -43,6 +33,7 @@ app.whenReady().then(() => {
   });
 });
 
+//no poner en caso de tener procesos en segundo plano
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
@@ -58,6 +49,7 @@ ipcMain.handle("obtener-ultima-boveda", async () => {
   }
   return null;
 });
+
 //Principal seleccionar boveda 
 
 // Seleccionar carpeta
@@ -73,16 +65,30 @@ ipcMain.handle("seleccionar-carpeta", async () => {
   return result.filePaths[0];
 });
 
-// Crear bóveda + guardar config.json
-ipcMain.handle("crear-boveda", async (event, rutaBase) => {
+// En caso de que ya exista una boveda
+
+// Verificar si ya existe una bóveda en la ruta y usarla, o indicar que hay que crearla
+ipcMain.handle("crear-o-abrir-boveda", async (event, rutaBase) => {
   try {
     const vault = path.join(rutaBase, "MiVault");
+    const configPath = path.join(vault, "config.json");
 
-    if (fs.existsSync(vault)) {
-      return { ok: false, error: "Ya existe una bóveda en esa ubicación." };
+    // Caso 1: ya existe una bóveda válida -> la usamos
+    if (fs.existsSync(vault) && fs.existsSync(configPath)) {
+      const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+
+      const appConfigPath = path.join(app.getPath("userData"), "config.json");
+      fs.writeFileSync(
+        appConfigPath,
+        JSON.stringify({ ultimaBoveda: vault }, null, 2),
+        "utf-8"
+      );
+
+      return { ok: true, ruta: vault, existente: true, config };
     }
 
-    fs.mkdirSync(vault);
+    // Caso 2: no existe -> la creamos
+    fs.mkdirSync(vault, { recursive: true });
     fs.mkdirSync(path.join(vault, "Notas"));
     fs.mkdirSync(path.join(vault, "Imagenes"));
     fs.mkdirSync(path.join(vault, "PDF"));
@@ -90,21 +96,14 @@ ipcMain.handle("crear-boveda", async (event, rutaBase) => {
     fs.mkdirSync(path.join(vault, "Plantillas"));
     fs.mkdirSync(path.join(vault, "Backups"));
 
-    // Guardar config.json dentro de la bóveda
     const config = {
       nombre: "MiVault",
       ruta: vault,
       fechaCreacion: new Date().toISOString(),
       version: "1.0.0",
     };
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2), "utf-8");
 
-    fs.writeFileSync(
-      path.join(vault, "config.json"),
-      JSON.stringify(config, null, 2),
-      "utf-8"
-    );
-
-    // También guardar config.json global de la app (para saber qué bóveda abrir al iniciar)
     const appConfigPath = path.join(app.getPath("userData"), "config.json");
     fs.writeFileSync(
       appConfigPath,
@@ -112,37 +111,10 @@ ipcMain.handle("crear-boveda", async (event, rutaBase) => {
       "utf-8"
     );
 
-    return { ok: true, ruta: vault };
+    return { ok: true, ruta: vault, existente: false, config };
   } catch (error) {
     return { ok: false, error: error.message };
   }
-});
-
-
-//Funcionalidad para guardar el documento (nota)
-
-ipcMain.handle("guardar-documento", async (event, texto) => {
-
-    const { canceled, filePath } = await dialog.showSaveDialog({
-        title: "Guardar documento",
-        defaultPath: "VECINOSSALGAN_Documeanto.txt",
-        filters: [
-            { name: "Texto", extensions: ["txt"] }
-        ]
-    });
-
-    if (canceled || !filePath) {
-        return { success: false };
-    }
-
-    fs.writeFileSync(filePath, texto);
-
-    return {
-        success: true,
-        path: filePath,
-        fileName: filePath
-
-    };
 });
 
 

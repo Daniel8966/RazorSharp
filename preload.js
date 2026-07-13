@@ -7,11 +7,11 @@ contextBridge.exposeInMainWorld('vault', {
   //guardarDocumento: (texto) => ipcRenderer.invoke("guardar-documento", texto)
 });
 contextBridge.exposeInMainWorld("api", {
-    guardarDocumento: (texto) => ipcRenderer.invoke("guardar-documento", texto),
     seleccionarCarpeta: () => ipcRenderer.invoke("seleccionar-carpeta"),
-    crearBoveda: (rutaBase) => ipcRenderer.invoke("crear-boveda", rutaBase),
     obtenerUltimaBoveda: () => ipcRenderer.invoke("obtener-ultima-boveda"),
     guardarNota: (rutaVault, texto) => ipcRenderer.invoke("guardar-nota", { rutaVault, texto }),
+    leerNotas: (rutaVault) => ipcRenderer.invoke("leer-notas", rutaVault),
+    crearOAbrirBoveda: (ruta) => ipcRenderer.invoke("crear-o-abrir-boveda", ruta),
 
 });
 
