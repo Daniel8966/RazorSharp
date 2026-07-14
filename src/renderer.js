@@ -12,7 +12,6 @@ railButtons.forEach((btn) => {
 
 /* ---------- Carrusel de frases ---------- */
 const phraseEl = document.getElementById('phrase-text');
-const dotsEl = document.getElementById('phrase-dots');
 const prevBtn = document.getElementById('prev-phrase');
 const nextBtn = document.getElementById('next-phrase');
 
@@ -34,7 +33,7 @@ async function loadPhrases() {
     const resultado = await window.api.leerNotas(vaultActual);
 
     if (resultado.success && Array.isArray(resultado.notas) && resultado.notas.length > 0) {
-      // Ajusta "resultado.notas" al nombre real de la propiedad que devuelve tu handler
+      // Ajusta 
       listaFrases = resultado.notas;
     } else {
       listaFrases = fallbackPhrases.map(texto => ({ fecha: '', contenido: texto }));
@@ -45,18 +44,8 @@ async function loadPhrases() {
   }
 
   phrases = listaFrases;
-  buildDots();
+  
   renderPhrase(0);
-}
-function buildDots() {
-  dotsEl.innerHTML = '';
-  phrases.forEach((_, i) => {
-    const dot = document.createElement('button');
-    dot.className = 'dot';
-    dot.setAttribute('aria-label', `Frase ${i + 1}`);
-    dot.addEventListener('click', () => renderPhrase(i));
-    dotsEl.appendChild(dot);
-  });
 }
 
 function renderPhrase(index) {
@@ -75,9 +64,6 @@ function renderPhrase(index) {
     phraseEl.classList.remove('is-fading');
   }, 140);
 
-  [...dotsEl.children].forEach((dot, i) => {
-    dot.classList.toggle('is-active', i === current);
-  });
 }
 
 prevBtn.addEventListener('click', () => renderPhrase(current - 1));
