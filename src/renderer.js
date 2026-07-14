@@ -22,6 +22,24 @@ let current = 0;
 const fallbackPhrases = [
   'Guarda frases para mostrar Frases'
 ];
+
+//funcion para revolver arreglo y que no se muestren las mismas frases siempre 
+
+const mezclarArreglo = (arreglo) => {
+  // Crea una copia para no modificar el original si se desea inmutabilidad
+  const arr = [...arreglo];
+  
+  for (let i = arr.length - 1; i > 0; i--) {
+    // Genera un índice aleatorio entre 0 e i
+    const j = Math.floor(Math.random() * (i + 1));
+    
+    // Intercambia los elementos en las posiciones i y j
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  
+  return arr;
+};
+
 async function loadPhrases() {
   // Aseguramos tener el vault antes de usarlo
   if (!vaultActual) {
@@ -43,7 +61,7 @@ async function loadPhrases() {
     listaFrases = fallbackPhrases.map(texto => ({ fecha: '', contenido: texto }));
   }
 
-  phrases = listaFrases;
+  phrases = mezclarArreglo(listaFrases);
   
   renderPhrase(0);
 }
