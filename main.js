@@ -174,7 +174,12 @@ ipcMain.handle("leer-notas", async (event, rutaVault) => {
 });
 ipcMain.handle('load-partial', async (event, fileName) => {
   // Whitelist para evitar path traversal (seguridad)
-  const allowed = ['nav.html', 'footer.html']; // agrega aquí tus parciales
+  //const allowed = ['src', 'components', 'nav', 'nav.html', 'footer.html']; // agrega aquí tus parciales
+    const allowed = [
+    'src/components/nav/nav.html',
+    'src/components/footer/footer.html'
+  ];
+
   if (!allowed.includes(fileName)) {
     throw new Error('Archivo no permitido');
   }
