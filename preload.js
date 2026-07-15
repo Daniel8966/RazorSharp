@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld("api", {
     guardarNota: (rutaVault, texto) => ipcRenderer.invoke("guardar-nota", { rutaVault, texto }),
     leerNotas: (rutaVault) => ipcRenderer.invoke("leer-notas", rutaVault),
     crearOAbrirBoveda: (ruta) => ipcRenderer.invoke("crear-o-abrir-boveda", ruta),
+    loadPartial: (fileName) => ipcRenderer.invoke('load-partial', fileName),
 
 });
 

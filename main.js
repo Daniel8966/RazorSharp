@@ -172,3 +172,13 @@ ipcMain.handle("leer-notas", async (event, rutaVault) => {
     };
   }
 });
+ipcMain.handle('load-partial', async (event, fileName) => {
+  // Whitelist para evitar path traversal (seguridad)
+  const allowed = ['nav.html', 'footer.html']; // agrega aquí tus parciales
+  if (!allowed.includes(fileName)) {
+    throw new Error('Archivo no permitido');
+  }
+
+  const filePath = path.join(__dirname, fileName);
+  return fs.readFileSync(filePath, 'utf-8');
+});
