@@ -22,7 +22,7 @@ function createWindow() {
     },
   });
 
-  win.loadFile(path.join(__dirname, 'src/landing/landing.html'));
+  win.loadFile(path.join(__dirname, 'src/views/landing/landing.html'));
 }
 
 app.whenReady().then(() => {

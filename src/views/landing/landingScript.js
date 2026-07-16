@@ -31,7 +31,7 @@ btnCrear.addEventListener("click", async () => {
     btnCrear.textContent = resultado.existente ? "Bóveda abierta" : "Bóveda creada";
 
     setTimeout(() => {
-      window.location.href = "../index.html";
+      window.location.href = "../index/index.html"
     }, 1200);
   } else {
     mensaje.textContent = resultado.error;
