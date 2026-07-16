@@ -22,7 +22,6 @@ class AppNav extends HTMLElement {
   }
 
 
-
 }
 
 customElements.define('app-nav', AppNav);
