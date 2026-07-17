@@ -52,6 +52,17 @@ button {
   -webkit-app-region: drag;
 }
 
+app-nav {
+  display: contents; /* el fix que vimos antes */
+}
+
+#view-container {
+  flex: 1;
+  overflow: auto;
+  display: flex; /* si .content necesita ser flex hijo */
+}
+
+
 .rail-mark {
   color: var(--accent);
   width: 36px;

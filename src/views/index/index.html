@@ -5,47 +5,17 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;" />
   <title>Vault</title>
   <link rel="stylesheet" href="styles.css" />
-
 </head>
 <body>
   <div class="app">
+    <app-nav id="nav-placeholder"></app-nav>
 
-  <app-nav id="nav-placeholder" ></app-nav>
-
-    <!-- Contenido principal: carrusel de frases + panel de nota rapida -->
-    <main class="content" id="view-welcome">
-
-      <section class="carousel" aria-label="Frases para empezar el dia">
-        <div class="carousel-glow" aria-hidden="true"></div>
-
-        <p class="eyebrow">Para empezar el dia</p>
-
-        <div class="carousel-track">
-          <button class="carousel-arrow" id="prev-phrase" aria-label="Frase anterior">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>
-          </button>
-
-          <blockquote class="carousel-phrase" id="phrase-text">Cargando frases...</blockquote>
-
-          <button class="carousel-arrow" id="next-phrase" aria-label="Frase siguiente">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-          </button>
-        </div>
-
-      </section>
-
-      <aside class="note-panel">
-        <h2 class="note-title">Nota rapida</h2>
-        <textarea id="note-input" class="note-textarea" placeholder="Escribe algo antes de empezar el dia..."></textarea>
-        <div class="note-footer">
-          <span class="note-status" id="note-status"></span>
-          <button class="btn btn-primary" id="btn-save-note">Guardar</button>
-        </div>
-      </aside>
-
-    </main>
+    <div id="view-container">
+    
   </div>
+
   <script src="../../components/nav/nav-element.js"></script>
+  <!-- <script src="../app/render-app.js"></script> -->
   <script src="renderer.js"></script>
 </body>
 </html>

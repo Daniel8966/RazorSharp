@@ -1,7 +1,4 @@
-  <link rel="stylesheet" href="styles.css" />
 
-
-<style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -103,4 +100,4 @@
     .error {
       color: #f87171;
     }
-  </style>
+  

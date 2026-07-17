@@ -172,17 +172,23 @@ ipcMain.handle("leer-notas", async (event, rutaVault) => {
     };
   }
 });
-ipcMain.handle('load-partial', async (event, fileName) => {
-  // Whitelist para evitar path traversal (seguridad)
-    const allowed = [
-    'src/components/nav/nav.html',
-    'src/components/footer/footer.html'
-  ];
 
-  if (!allowed.includes(fileName)) {
-    throw new Error('Archivo no permitido');
+
+const SAFE_ROOT = path.join(__dirname, 'src');
+
+ipcMain.handle('load-partial', async (event, fileName) => {
+  const resolvedPath = path.resolve(path.join(SAFE_ROOT, fileName));
+
+  if (!resolvedPath.startsWith(SAFE_ROOT + path.sep)) {
+    throw new Error('Ruta no permitida');
+  }
+  if (path.extname(resolvedPath) !== '.html') {
+    throw new Error('Tipo de archivo no permitido');
   }
 
-  const filePath = path.join(__dirname, fileName);
-  return fs.readFileSync(filePath, 'utf-8');
+  try {
+    return await fs.promises.readFile(resolvedPath, 'utf-8');
+  } catch (err) {
+    throw new Error(`No se pudo cargar la vista: ${fileName}`);
+  }
 });

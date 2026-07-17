@@ -1,14 +1,20 @@
 
 // preubas 
-/* ---------- Rail lateral ---------- */
-const railButtons = document.querySelectorAll('.rail-btn');
-railButtons.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    railButtons.forEach((b) => b.classList.remove('is-active'));
-    btn.classList.add('is-active');
-    console.log('Cambiar a vista:', btn.dataset.view);
-  });
-});
+
+
+async function loadView(viewName) {
+  const container = document.getElementById('view-container');
+  try {
+    const html = await window.api.loadPartial(viewName);
+    container.innerHTML = html;
+  } catch (err) {
+    container.innerHTML = `<p class="error">Error al cargar la vista: ${err.message}</p>`;
+    console.error(err);
+  }
+}
+
+// Carga inicial
+loadView('views/app/appIndex.html');
 
 /* ---------- Carrusel de frases ---------- */
 const phraseEl = document.getElementById('phrase-text');
