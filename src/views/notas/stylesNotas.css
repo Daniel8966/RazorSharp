@@ -1,0 +1,94 @@
+/* Asegura que el contenedor raíz y la vista ocupen todo el ancho disponible */
+#view-container,
+#view-notes {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#view-notes {
+  padding: 24px;
+}
+
+.notes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap; /* clave: permite que baje de línea en vez de cortarse */
+  width: 100%;
+}
+
+.notes-header > div:first-child {
+  min-width: 200px; /* evita que el título se comprima demasiado */
+  flex: 1 1 auto;
+}
+
+.notes-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 1 1 320px; /* si no cabe junto al título, baja completo */
+  justify-content: flex-end;
+}
+
+.notes-search {
+  flex: 1 1 180px;
+  min-width: 0;      /* CLAVE: permite que el input se encoja en vez de desbordar */
+  max-width: 260px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #333);
+  background: var(--surface, #1a1a1a);
+  color: var(--text, #eee);
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden; /* evita el corte lateral */
+}
+
+.note-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--surface, #1a1a1a);
+  border: 1px solid var(--border, #2a2a2a);
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.note-card-main {
+  flex: 1 1 auto;
+  min-width: 0; /* CLAVE: sin esto el texto largo empuja y corta el layout */
+}
+
+.note-card-title,
+.note-card-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Vista de notas: fuerza columna sin depender del breakpoint de .content */
+#view-notes.content {
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px;
+  box-sizing: border-box;
+  width: 100%;
+}

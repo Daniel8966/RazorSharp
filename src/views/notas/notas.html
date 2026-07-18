@@ -1,32 +1,72 @@
 
-    <main class="content" id="view-welcome">
+<main class="content" id="view-notes" hidden>
+  <header class="notes-header">
+    <div>
+      <h2 class="note-title">Mis notas</h2>
+      <p class="eyebrow">Selecciona una nota para editarla</p>
+    </div>
+    <div class="notes-header-actions">
+      <input type="search" id="notes-search" class="notes-search" placeholder="Buscar nota...">
+      <button class="btn btn-primary" id="btn-new-note">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Nueva nota
+      </button>
+    </div>
+  </header>
 
-      <section class="carousel" aria-label="Frases para empezar el dia">
-        <div class="carousel-glow" aria-hidden="true"></div>
+  <section class="notes-list" id="notes-list" aria-label="Lista de notas">
+    <!-- Cada item se genera dinámicamente, aquí un ejemplo estático -->
+    <article class="note-card" data-id="1">
+      <div class="note-card-main">
+        <h3 class="note-card-title">Ideas para el proyecto</h3>
+        <p class="note-card-preview">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      </div>
+      <div class="note-card-meta">
+        <span class="note-card-date">Hoy, 10:32</span>
+        <button class="note-card-delete" aria-label="Eliminar nota" data-id="1">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+        </button>
+      </div>
+    </article>
+    <article class="note-card" data-id="1">
+      <div class="note-card-main">
+        <h3 class="note-card-title">Ideas para el proyecto</h3>
+        <p class="note-card-preview">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      </div>
+      <div class="note-card-meta">
+        <span class="note-card-date">Hoy, 10:32</span>
+        <button class="note-card-delete" aria-label="Eliminar nota" data-id="1">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+        </button>
+      </div>
+    </article>
+    <article class="note-card" data-id="1">
+      <div class="note-card-main">
+        <h3 class="note-card-title">Ideas para el proyecto</h3>
+        <p class="note-card-preview">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      </div>
+      <div class="note-card-meta">
+        <span class="note-card-date">Hoy, 10:32</span>
+        <button class="note-card-delete" aria-label="Eliminar nota" data-id="1">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+        </button>
+      </div>
+    </article>
+    <article class="note-card" data-id="1">
+      <div class="note-card-main">
+        <h3 class="note-card-title">Ideas para el proyecto</h3>
+        <p class="note-card-preview">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      </div>
+      <div class="note-card-meta">
+        <span class="note-card-date">Hoy, 10:32</span>
+        <button class="note-card-delete" aria-label="Eliminar nota" data-id="1">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>
+        </button>
+      </div>
+    </article>
+    
+  </section>
 
-        <p class="eyebrow">Este sera el espacio destinado para hacer y editar notas largas</p>
-
-        <div class="carousel-track">
-          <button class="carousel-arrow" id="prev-phrase" aria-label="Frase anterior">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>
-          </button>
-
-          <blockquote class="carousel-phrase" id="phrase-text">Cargando frases...</blockquote>
-
-          <button class="carousel-arrow" id="next-phrase" aria-label="Frase siguiente">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>
-          </button>
-        </div>
-
-      </section>
-
-      <aside class="note-panel">
-        <h2 class="note-title">Nota rapida</h2>
-        <textarea id="note-input" class="note-textarea" placeholder="Escribe algo antes de empezar el dia..."></textarea>
-        <div class="note-footer">
-          <span class="note-status" id="note-status"></span>
-          <button class="btn btn-primary" id="btn-save-note">Guardar</button>
-        </div>
-      </aside>
-
-    </main>
+  <p class="notes-empty" id="notes-empty" hidden>Aún no tienes notas. Crea la primera con "Nueva nota".</p>
+  
+</main>
