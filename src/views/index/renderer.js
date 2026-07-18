@@ -20,6 +20,7 @@ async function loadView(viewName) {
 let vaultActual = null;
 let phrases = [];
 let current = 0;
+let currentViewCleanup = null;
 
 const fallbackPhrases = [
   'Guarda frases para mostrar Frases'
@@ -49,6 +50,9 @@ function initHomeView() {
     return;
   }
 
+  const AUTOPLAY_MS = 10000;
+  let autoplayTimer = null;
+
   function renderPhrase(index) {
     if (!phrases.length) return;
     current = (index + phrases.length) % phrases.length;
@@ -59,6 +63,22 @@ function initHomeView() {
       if (fechaEl) fechaEl.textContent = fecha;
       phraseEl.classList.remove('is-fading');
     }, 140);
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => renderPhrase(current + 1), AUTOPLAY_MS);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  function resetAutoplay() {
+    startAutoplay();
   }
 
   async function loadPhrases() {
@@ -79,15 +99,19 @@ function initHomeView() {
     }
     phrases = mezclarArreglo(listaFrases);
     renderPhrase(0);
+    startAutoplay();
   }
 
-  prevBtn.addEventListener('click', () => renderPhrase(current - 1));
-  nextBtn.addEventListener('click', () => renderPhrase(current + 1));
+  const onPrev = () => { renderPhrase(current - 1); resetAutoplay(); };
+  const onNext = () => { renderPhrase(current + 1); resetAutoplay(); };
+  const onKeydown = (e) => {
+    if (e.key === 'ArrowLeft') onPrev();
+    if (e.key === 'ArrowRight') onNext();
+  };
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft') renderPhrase(current - 1);
-    if (e.key === 'ArrowRight') renderPhrase(current + 1);
-  });
+  prevBtn.addEventListener('click', onPrev);
+  nextBtn.addEventListener('click', onNext);
+  document.addEventListener('keydown', onKeydown);
 
   saveBtn.addEventListener('click', async () => {
     const content = noteInput.value.trim();
@@ -117,6 +141,14 @@ function initHomeView() {
   });
 
   loadPhrases();
+
+  // Cleanup: se ejecuta cuando se navega fuera de esta vista
+  return function cleanupHomeView() {
+    stopAutoplay();
+    document.removeEventListener('keydown', onKeydown);
+    // prevBtn/nextBtn/saveBtn/noteInput mueren junto con el innerHTML,
+    // así que sus listeners no necesitan removerse a mano.
+  };
 }
 
 /* ---------- 4. Registro de inicializadores por vista ---------- */
@@ -127,6 +159,12 @@ const viewInitializers = {
 
 /* ---------- 5. Navegación centralizada ---------- */
 async function navigateTo(viewName) {
+  // Limpia la vista anterior ANTES de tocar el DOM
+  if (typeof currentViewCleanup === 'function') {
+    currentViewCleanup();
+    currentViewCleanup = null;
+  }
+
   const container = document.getElementById('view-container');
   const ok = await loadView(viewName);
   if (!ok) return;
@@ -138,9 +176,10 @@ async function navigateTo(viewName) {
   }
 
   const init = viewInitializers[viewName];
-  if (init) init();
+  if (init) {
+    currentViewCleanup = init(); // guarda el cleanup que devuelva el init (si devuelve alguno)
+  }
 }
-
 /* ---------- 6. Delegación de eventos del nav (vive fuera de #view-container) ---------- */
 document.body.addEventListener('click', (e) => {
   const btn = e.target.closest('[data-view]');
