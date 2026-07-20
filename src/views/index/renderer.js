@@ -81,7 +81,9 @@ function initHomeView() {
     startAutoplay();
   }
 
-  async function loadPhrases() {
+  async function loadPhrases(nuevaFrase) {
+
+
     if (!vaultActual) {
       vaultActual = await window.api.obtenerUltimaBoveda();
     }
@@ -97,7 +99,19 @@ function initHomeView() {
       console.error('Error cargando frases:', error);
       listaFrases = fallbackPhrases.map(texto => ({ fecha: '', contenido: texto }));
     }
-    phrases = mezclarArreglo(listaFrases);
+    //si existe una nueva frase debe de mostrarse al inicio del arreglo (ultima del original)
+    if (nuevaFrase){
+      const ultimo = listaFrases.slice(-1)[0];
+      listaFrases.pop();
+      phrases = mezclarArreglo(listaFrases)
+      phrases.unshift(ultimo);
+      console.log("existe una nueva frase" , nuevaFrase);
+      console.log("el ultimo elemento anadido sera" , ultimo); 
+      console.log("arreglo final: ", phrases)
+
+    }else{
+      phrases = mezclarArreglo(listaFrases);
+    }
     renderPhrase(0);
     startAutoplay();
   }
@@ -125,6 +139,7 @@ function initHomeView() {
         noteInput.value = '';
         noteStatus.textContent = 'Nota guardada :D';
         noteStatus.classList.add('is-saved');
+        loadPhrases(content);
       } else {
         noteStatus.textContent = 'No se pudo guardar.';
       }
@@ -135,12 +150,11 @@ function initHomeView() {
       saveBtn.disabled = false;
     }
   });
-
+  loadPhrases(false);
   noteInput.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') saveBtn.click();
   });
 
-  loadPhrases();
 
   // Cleanup: se ejecuta cuando se navega fuera de esta vista
   return function cleanupHomeView() {
