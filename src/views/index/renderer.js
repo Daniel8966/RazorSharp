@@ -81,9 +81,13 @@ function initHomeView() {
     startAutoplay();
   }
 
+  //Esta funcion carga todas las frases del archivo marcado con la variable global y haciendo uso del ipc al igual 
+  // que las imagenes motivacionales (siguiente iteracion)
+  // se apoya con Render() para cargar en pantalla  y el autoplay() para el timer de pasar una a otra 
+  // let vaultActual : path para la vaul
+  // let phrases : arreglo sobre el cual se almacenan y se muestran
+  // let current : posicion actual del arreglo para render
   async function loadPhrases(nuevaFrase) {
-
-
     if (!vaultActual) {
       vaultActual = await window.api.obtenerUltimaBoveda();
     }
@@ -105,9 +109,6 @@ function initHomeView() {
       listaFrases.pop();
       phrases = mezclarArreglo(listaFrases)
       phrases.unshift(ultimo);
-      console.log("existe una nueva frase" , nuevaFrase);
-      console.log("el ultimo elemento anadido sera" , ultimo); 
-      console.log("arreglo final: ", phrases)
 
     }else{
       phrases = mezclarArreglo(listaFrases);
