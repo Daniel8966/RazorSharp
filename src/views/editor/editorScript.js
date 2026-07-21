@@ -8,7 +8,7 @@ async function initEditor() {
     const controller = new AbortController();
     const { signal } = controller;
 
-    function guardarNota() {
+    async function guardarNota() {
         const nota = {
             titulo: inputTitulo.value.trim() || 'Sin título',
             contenido: inputContenido.value,
@@ -17,9 +17,9 @@ async function initEditor() {
         console.log("guardando nota:", nota);
 
         try {
-            const resultado =  window.api.guardarNota(vaultActual, nota.contenido, nota.titulo);
+            const resultado =  await window.api.guardarNota(vaultActual, nota.contenido, nota.titulo);
             if (resultado.success) {
-                
+                navigateTo('views/notas/notas.html');
             } else {
                 console.log('no se pudo guardar.');
             }

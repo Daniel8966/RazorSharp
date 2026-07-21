@@ -178,18 +178,21 @@ ipcMain.handle("leer-frases", async (event, rutaVault) => {
 
 // Guarda (agrega) una nota al archivo grande dentro de la bóveda
 ipcMain.handle("guardar-Nota", async (event, { rutaVault, texto, titulo }) => {
-
   try {
-
     const notasPath = path.join(rutaVault, "Notas/Archivos", `${titulo}.txt`);
+
+    if (fs.existsSync(notasPath)) {
+      return { success: false, error: "Ya existe una nota con ese título." };
+    }
+
     const fecha = new Date().toLocaleString();
-    const contenido = `\n\n---\n[${fecha}]\n${texto}\n`;
+    const contenido = `[${fecha}]\n${texto}\n`;
+    fs.writeFileSync(notasPath, contenido, "utf-8"); // writeFile, no append, para una nota nueva
 
-    // Si el archivo no existe, lo crea; si existe, agrega al final
-    fs.appendFileSync(notasPath, contenido, "utf-8");
-
+    console.log("nota guardada exitosamente");
     return { success: true, path: notasPath };
   } catch (error) {
+    console.log(error.message);
     return { success: false, error: error.message };
   }
 });
