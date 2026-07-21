@@ -199,9 +199,38 @@ ipcMain.handle("guardar-Nota", async (event, { rutaVault, texto, titulo }) => {
 
 // Leer todas las notas (para mostrarlas en tu app) convertir a arreglo de json con fecha y contenido [obj, obj]
 ipcMain.handle("leer-notas", async (event, rutaVault) => {
+  try {
+    const notasDir = path.join(rutaVault, "Notas/Archivos");
 
+    if (!fs.existsSync(notasDir)) {
+      return { success: true, notas: [] };
+    }
+
+    const archivos = fs.readdirSync(notasDir).filter(f => f.endsWith(".txt"));
+
+    const notas = archivos.map((archivo) => {
+      const rutaCompleta = path.join(notasDir, archivo);
+      const stats = fs.statSync(rutaCompleta);
+      const contenido = fs.readFileSync(rutaCompleta, "utf-8");
+      const titulo = path.basename(archivo, ".txt");
+
+      return {
+        titulo,
+        contenido,
+        fecha: stats.mtime.toISOString(), // fecha de última modificación
+        ruta: rutaCompleta
+      };
+    });
+
+    // opcional: ordenar por fecha más reciente primero
+    notas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+    return { success: true, notas };
+  } catch (error) {
+    console.log(error.message);
+    return { success: false, error: error.message, notas: [] };
+  }
 });
-
 
 const SAFE_ROOT = path.join(__dirname, 'src');
 
