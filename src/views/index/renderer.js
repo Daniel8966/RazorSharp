@@ -1,3 +1,4 @@
+
 /* ============================================================
    renderer.js — completo y reorganizado
    ============================================================ */
@@ -80,13 +81,15 @@ function initHomeView() {
   function resetAutoplay() {
     startAutoplay();
   }
+  /*
+  Esta funcion carga todas las frases del archivo marcado con la variable global y haciendo uso del ipc al igual 
+  que las imagenes motivacionales (siguiente iteracion)
+  se apoya con Render() para cargar en pantalla  y el autoplay() para el timer de pasar una a otra 
+  let vaultActual : path para la vaul
+  let phrases : arreglo sobre el cual se almacenan y se muestran
+  let current : posicion actual del arreglo para render
 
-  //Esta funcion carga todas las frases del archivo marcado con la variable global y haciendo uso del ipc al igual 
-  // que las imagenes motivacionales (siguiente iteracion)
-  // se apoya con Render() para cargar en pantalla  y el autoplay() para el timer de pasar una a otra 
-  // let vaultActual : path para la vaul
-  // let phrases : arreglo sobre el cual se almacenan y se muestran
-  // let current : posicion actual del arreglo para render
+  */
   async function loadPhrases(nuevaFrase) {
     if (!vaultActual) {
       vaultActual = await window.api.obtenerUltimaBoveda();
@@ -169,8 +172,10 @@ function initHomeView() {
 /* ---------- 4. Registro de inicializadores por vista ---------- */
 const viewInitializers = {
   'views/app/appIndex.html': initHomeView,
-  // 'views/app/otraVista.html': initOtraVista,
+  'views/notas/notas.html': initNotas,
+  'views/editor/editor.html': initEditor,
 };
+
 
 /* ---------- 5. Navegación centralizada ---------- */
 async function navigateTo(viewName) {
