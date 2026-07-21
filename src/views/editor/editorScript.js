@@ -1,6 +1,5 @@
 async function initEditor() {
 
-
     const inputTitulo = document.getElementById('titulo-nota');
     const inputContenido = document.getElementById('contenido-nota');
     const btnGuardar = document.getElementById('btn-guardar');
@@ -17,8 +16,17 @@ async function initEditor() {
         };
         console.log("guardando nota:", nota);
 
-        
-        const resultado =  window.api.guardarNota(vaultActual, nota.contenido);
+        try {
+            const resultado =  window.api.guardarNota(vaultActual, nota.contenido, nota.titulo);
+            if (resultado.success) {
+                
+            } else {
+                console.log('no se pudo guardar.');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+
     }
 
     // Autoguardado opcional con Ctrl+S — listener a nivel document, usa signal

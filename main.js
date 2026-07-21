@@ -177,10 +177,11 @@ ipcMain.handle("leer-frases", async (event, rutaVault) => {
 });
 
 // Guarda (agrega) una nota al archivo grande dentro de la bóveda
-ipcMain.handle("guardar-nota", async (event, { rutaVault, texto }) => {
-  try {
-    const notasPath = path.join(rutaVault, "Notas", NOTAS_FILENAME);
+ipcMain.handle("guardar-Nota", async (event, { rutaVault, texto, titulo }) => {
 
+  try {
+
+    const notasPath = path.join(rutaVault, "Notas/Archivos", `${titulo}.txt`);
     const fecha = new Date().toLocaleString();
     const contenido = `\n\n---\n[${fecha}]\n${texto}\n`;
 
