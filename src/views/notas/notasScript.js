@@ -1,5 +1,4 @@
 async function initNotas() {
-    console.log("entrando a la funcion de este codigo");
     const nuevaNota = document.getElementById('fab-new-note');
 
     function addNota() {

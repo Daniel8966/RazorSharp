@@ -96,7 +96,7 @@ function initHomeView() {
     }
     let listaFrases;
     try {
-      const resultado = await window.api.leerNotas(vaultActual);
+      const resultado = await window.api.leerFrases(vaultActual);
       if (resultado.success && Array.isArray(resultado.notas) && resultado.notas.length > 0) {
         listaFrases = resultado.notas;
       } else {
@@ -138,7 +138,7 @@ function initHomeView() {
     noteStatus.textContent = 'Guardando...';
     noteStatus.classList.remove('is-saved');
     try {
-      const resultado = await window.api.guardarNota(vaultActual, content);
+      const resultado = await window.api.guardarFrase(vaultActual, content);
       if (resultado.success) {
         noteInput.value = '';
         noteStatus.textContent = 'Nota guardada :D';

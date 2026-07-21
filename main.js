@@ -89,7 +89,10 @@ ipcMain.handle("crear-o-abrir-boveda", async (event, rutaBase) => {
 
     // Caso 2: no existe -> la creamos
     fs.mkdirSync(vault, { recursive: true });
+    //Aqui se guardan las notas motivacionales (frases cortas)
     fs.mkdirSync(path.join(vault, "Notas"));
+    //Aqui se guardan las notas individuales 
+    fs.mkdirSync(path.join(vault, "Notas/Archivos"));
     fs.mkdirSync(path.join(vault, "Imagenes"));
     fs.mkdirSync(path.join(vault, "PDF"));
     fs.mkdirSync(path.join(vault, "Adjuntos"));
@@ -121,7 +124,7 @@ ipcMain.handle("crear-o-abrir-boveda", async (event, rutaBase) => {
 const NOTAS_FILENAME = "notas_motivacionales.txt";
 
 // Guarda (agrega) una nota al archivo grande dentro de la bóveda
-ipcMain.handle("guardar-nota", async (event, { rutaVault, texto }) => {
+ipcMain.handle("guardar-frase", async (event, { rutaVault, texto }) => {
   try {
     const notasPath = path.join(rutaVault, "Notas", NOTAS_FILENAME);
 
@@ -138,7 +141,7 @@ ipcMain.handle("guardar-nota", async (event, { rutaVault, texto }) => {
 });
 
 // Leer todas las notas (para mostrarlas en tu app) convertir a arreglo de json con fecha y contenido [obj, obj]
-ipcMain.handle("leer-notas", async (event, rutaVault) => {
+ipcMain.handle("leer-frases", async (event, rutaVault) => {
   try {
     const notasPath = path.join(rutaVault, "Notas", NOTAS_FILENAME);
 
@@ -171,6 +174,28 @@ ipcMain.handle("leer-notas", async (event, rutaVault) => {
       error: error.message
     };
   }
+});
+
+// Guarda (agrega) una nota al archivo grande dentro de la bóveda
+ipcMain.handle("guardar-nota", async (event, { rutaVault, texto }) => {
+  try {
+    const notasPath = path.join(rutaVault, "Notas", NOTAS_FILENAME);
+
+    const fecha = new Date().toLocaleString();
+    const contenido = `\n\n---\n[${fecha}]\n${texto}\n`;
+
+    // Si el archivo no existe, lo crea; si existe, agrega al final
+    fs.appendFileSync(notasPath, contenido, "utf-8");
+
+    return { success: true, path: notasPath };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
+
+// Leer todas las notas (para mostrarlas en tu app) convertir a arreglo de json con fecha y contenido [obj, obj]
+ipcMain.handle("leer-notas", async (event, rutaVault) => {
+
 });
 
 

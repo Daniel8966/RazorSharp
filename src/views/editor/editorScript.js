@@ -1,5 +1,5 @@
 async function initEditor() {
-    console.log("entrando a initEditor");
+
 
     const inputTitulo = document.getElementById('titulo-nota');
     const inputContenido = document.getElementById('contenido-nota');
@@ -16,8 +16,9 @@ async function initEditor() {
             fecha: new Date().toISOString()
         };
         console.log("guardando nota:", nota);
-        // Aquí llamas a tu IPC/API para persistir, ej:
-        // window.api.guardarNota(nota);
+
+        
+        const resultado =  window.api.guardarNota(vaultActual, nota.contenido);
     }
 
     // Autoguardado opcional con Ctrl+S — listener a nivel document, usa signal

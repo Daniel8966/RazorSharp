@@ -9,8 +9,8 @@ contextBridge.exposeInMainWorld('vault', {
 contextBridge.exposeInMainWorld("api", {
     seleccionarCarpeta: () => ipcRenderer.invoke("seleccionar-carpeta"),
     obtenerUltimaBoveda: () => ipcRenderer.invoke("obtener-ultima-boveda"),
-    guardarNota: (rutaVault, texto) => ipcRenderer.invoke("guardar-nota", { rutaVault, texto }),
-    leerNotas: (rutaVault) => ipcRenderer.invoke("leer-notas", rutaVault),
+    guardarFrase: (rutaVault, texto) => ipcRenderer.invoke("guardar-frase", { rutaVault, texto }),
+    leerFrases: (rutaVault) => ipcRenderer.invoke("leer-frases", rutaVault),
     crearOAbrirBoveda: (ruta) => ipcRenderer.invoke("crear-o-abrir-boveda", ruta),
     loadPartial: (fileName) => ipcRenderer.invoke('load-partial', fileName),
 
